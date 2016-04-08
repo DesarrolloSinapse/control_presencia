@@ -1,0 +1,51 @@
+<div class="text-center">
+
+<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"></div>
+
+<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+<h2><b>Editar Perfil</b></h2>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+  <%= devise_error_messages! %>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true , class: 'form-control' %>
+  </div>
+
+  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+    <div>Esperando confirmación para: <%= resource.unconfirmed_email %></div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :password , "Nueva Contraseña" %> <i>(Dejar en blanco si no se quiere cambiar)</i><br />
+    <%= f.password_field :password, autocomplete: "off" , class: 'form-control' %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation , "Repita Nueva Contraseña" %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "off" , class: 'form-control' %>
+  </div>
+
+  <div class="field">
+    <%= f.label :current_password , "Contraseña actual" %> <i>(Introduzca su contraseña actual para confirmar cambios)</i><br />
+    <%= f.password_field :current_password, autocomplete: "off" %>
+  </div>
+  <br>
+  <div class="actions">
+    <%= f.submit "Actualizar" , class: 'btn btn-primary' %>
+  </div>
+<% end %>
+
+<h3>Cancelar mi Cuenta</h3>
+
+<p>Si desea dar de baja su cuenta, pulse aquí: <%= button_to "Cancelar mi Cuenta", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete , class: 'btn btn-warning' %></p>
+
+<%= link_to "Back", :back , class: 'btn btn-default' %><br>
+<br>
+
+</div>
+
+<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"></div>
+
+</div>

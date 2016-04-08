@@ -1,0 +1,63 @@
+<div class="text-center">
+  
+  <p id="notice"><%= notice %></p>
+
+  <h2 style="margin-bottom: 30px;"><b>Gestión de Empleados</b></h2>
+  <div class="table-responsive" style="margin-left: 15px; margin-right: 15px;">
+    <table class="table table-condensed table-hover">
+      <thead>
+        <tr>
+          <th class="encabezado success">Código</th>
+          <th class="encabezado info">Nombre</th>
+          <th class="encabezado encabezado success">Apellidos</th>
+          <th class="encabezado info">Domicilio</th>
+          <th class="encabezado success">Email</th>
+          <th class="encabezado info">Centro</th>
+          <th class="encabezado success">Tarjeta</th>
+          <th class="encabezado info">Dentro</th>
+          <th class="encabezado success">Activo</th>
+          <th colspan="1"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @usuarios.each do |usuario| %>
+          <tr>
+            <td class="cuerpo"><%= usuario.codigo %></td>
+            <td class="cuerpo"><%= usuario.nombre %></td>
+            <td class="cuerpo"><%= usuario.apellidos %></td>
+            <td class="cuerpo"><%= usuario.domicilio %></td>
+            <td class="cuerpo"><%= usuario.email %></td>
+            <td class="cuerpo"><%= usuario.centro %></td>
+            <td class="cuerpo"><%= usuario.card.codigo %></td>
+            <td class="cuerpo">
+              <% if usuario.dentro == 1 %>
+              <%= r = "SÍ" %>
+              <% else %>
+              <%= r = "NO" %>
+              <% end %>
+            </td>
+            <td class="cuerpo">
+            <% if usuario.activo == 1 %>
+              <%= r = "SÍ" %>
+              <% else %>
+              <%= r = "NO" %>
+              <% end %>
+            </td>
+            <td style="border-bottom: 1px solid #CCCCCC;">
+              <%= link_to 'Ver', usuario , class: "btn btn-default btn-sm" %>
+              <%= link_to 'Editar', edit_usuario_path(usuario), class: "btn btn-primary btn-sm" %>
+              <%= link_to 'Borrar', usuario, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger btn-sm" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+</table>
+  </div>
+  <br>
+
+  <%= link_to 'Nuevo Empleado', new_usuario_path , {class: "btn btn-default"} %>
+  <%= link_to 'Volver', {controller: "main", action: "gestion"}, {class: "btn btn-danger"} %>
+
+
+</div>

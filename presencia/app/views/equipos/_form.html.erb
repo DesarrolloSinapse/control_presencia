@@ -1,0 +1,45 @@
+<%= form_for(@equipo) do |f| %>
+  <% if @equipo.errors.any? %>
+    <div id="error_explanation" class="errores">
+      <h4><b><u>Errores Encontrados</u></b></h4>
+      <% @equipo.errors.full_messages.each do |message| %>
+        <%= message %><br>
+      <% end %>
+    </div>
+  <% end %>
+  <br>
+  <div class="field">
+    <%= f.label :nombre %>
+    <%= f.text_field :nombre , class: 'form-control' %>
+  </div>
+  <br>
+  <div class="field">
+    <%= f.label :zona %>
+    <%= f.text_field :zona , class: 'form-control' %>
+  </div>
+  <br>
+  <div class="field">
+    <%= f.label :ip %>
+    <%= f.text_field :ip , class: 'form-control' %>
+  </div>
+  <br>
+  <div class="field">
+    <%= f.label :activo %><br>
+    <div class="radio-inline">
+      <%= f.radio_button :activo, 1 %> SÍ
+    </div>
+    <div class="radio-inline">
+      <%= f.radio_button :activo, 0 %>   NO 
+    </div>
+  </div>
+  <br>
+  <div class="field">
+    <%= f.label :DNS %>
+    <%= f.text_area :dns, class: 'form-control' %>
+  </div>
+  <br>
+  <div class="actions">
+    <%= f.submit 'Aceptar', class: 'btn btn-default'%>
+  </div>
+  <br>
+<% end %>

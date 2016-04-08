@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Tiempo lectora:</strong>
+  <%= @log.tiempo_lectora %>
+</p>
+
+<p>
+  <strong>Tiempo registro:</strong>
+  <%= @log.tiempo_registro %>
+</p>
+
+<p>
+  <strong>Equipo:</strong>
+  <%= @log.equipo %>
+</p>
+
+<p>
+  <strong>Card:</strong>
+  <%= @log.card %>
+</p>
+
+<p>
+  <strong>Usuario:</strong>
+  <%= @log.usuario %>
+</p>
+
+<%= link_to 'Edit', edit_log_path(@log) %> |
+<%= link_to 'Back', logs_path %>

@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  email: MyText
+  password: MyText
+  smtp_server: MyText
+  puerto: 1
+  ssl: false
+
+two:
+  email: MyText
+  password: MyText
+  smtp_server: MyText
+  puerto: 1
+  ssl: false
