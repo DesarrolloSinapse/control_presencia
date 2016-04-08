@@ -70,10 +70,16 @@ end
 %>
 
 <h4><b>Total Horas Semanales</b></h4>
-<%= @acum.round(2) %><br>
+<%= r = @acum.round(2).divmod 1 
+	hora = r.first
+	min = ((r.second*100) * 60)/100
+	res = hora.to_s+":"+min.to_i.to_s %><br>
 <br>
 <h4><b>Media Horas Diarias</b></h4>
-<%= @media.round(2) %><br>
+<%= r = @media.round(2).divmod 1 
+	hora = r.first
+	min = ((r.second*100) * 60)/100
+	res = hora.to_s+":"+min.to_i.to_s %><br>
 <br>
 <h4><b>Horas Por Día</b></h4>
 <div class="table-responsive">
@@ -88,7 +94,10 @@ end
 		<% @horas.each do |h| %>
 		<tr>
 			<td class="cuerpo"><%= h.second %></td>
-			<td class="cuerpo"><%= h.first.round(2) %></td>
+			<td class="cuerpo"><%=r = h.first.round(2).divmod 1
+				hora = r.first
+				min = ((r.second*100) * 60)/100
+				res = hora.to_s+":"+min.to_i.to_s %></td>
 		</tr>
 		<% end %>
 	</tbody>
