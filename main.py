@@ -111,7 +111,7 @@ def envio_email(asunto, mensaje):
 
 		server.login(servidor[1],servidor[2])
 
-		cursor.execute("SELECT * FROM users WHERE admin")
+		cursor.execute("SELECT * FROM users WHERE admin = 1")
 		administradores = cursor.fetchall()
 		for admin in administradores:
 			msg = '''From: SERVIDOR CONTROL DE PRESENCIA <%s>
@@ -121,12 +121,10 @@ def envio_email(asunto, mensaje):
 			Subject: %s
 
 			%s
-			''' % (servidor[1], admin[1], admin[1], asunto, cuerpo)
-
-			server.sendmail(servidor[1],admin[1],msg)
-			print("\n-----------------------------------\n"+asunto+"\n\n"+cuerpo+"\n-----------------------------------\n")
+			''' % (servidor[1], admin[1], admin[1], asunto, mensaje)			
+			server.sendmail(servidor[1],admin[1],msg)			
 	else:
-		print("\n-----------------------------------\n"+asunto+"\n\n"+cuerpo+"\n-----------------------------------\n")
+		print("\n-----------------------------------\n"+asunto+"\n\n"+mensaje+"\n-----------------------------------\n")
 
 
 def genera_xml(ip, t_lectora, cod_usuario, cod_tarjeta):
@@ -145,15 +143,15 @@ def genera_xml(ip, t_lectora, cod_usuario, cod_tarjeta):
 
 	cursor.execute('UPDATE equipos SET updated_at = %s WHERE id = %s',(time.strftime('%Y-%m-%d %H:%M:%S'), lectora[0],))
 
-	if(usuario[12] != tarjeta[0] or tarjeta[2] != usuario[0]):
+	if(tarjeta[2] != usuario[0]):
 		codigo = -1
 		nombre = "**ACCESO CON TARJETA INCORRECTA**"
 		documento = '********'
 		acceso = False
 		mensaje = "EL usuario %s %s ha intentado acceder con una tarjeta incorrecta" % (usuario[2], usuario[3])
 
-		envio_email(nombre,mensaje)
-		
+		envio_email(nombre,mensaje)		
+			
 		return create_reg(codigo, nombre, documento, acceso)
 	elif(lectora[4] == 0):
 		codigo = -2
@@ -263,7 +261,7 @@ class Auxiliar(http.server.BaseHTTPRequestHandler):
 
 		
 def main():
-	server_add = ('', 8000)
+	server_add = ('', 9000)	
 	httpd = http.server.HTTPServer(server_add,Auxiliar)
 	httpd.serve_forever()
 
