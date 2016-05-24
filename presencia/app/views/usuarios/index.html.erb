@@ -29,7 +29,11 @@
             <td class="cuerpo"><%= usuario.domicilio %></td>
             <td class="cuerpo"><%= usuario.email %></td>
             <td class="cuerpo"><%= usuario.centro %></td>
-            <td class="cuerpo"><%= usuario.card.codigo %></td>
+            <td class="cuerpo"><%=
+              if !usuario.card.nil?
+                usuario.card.codigo
+              end
+            %></td>
             <td class="cuerpo">
               <% if usuario.dentro == 1 %>
               <%= r = "SÍ" %>

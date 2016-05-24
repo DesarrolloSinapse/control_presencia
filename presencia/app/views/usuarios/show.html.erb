@@ -38,7 +38,11 @@
 
   <p>
     <strong>Tarjeta:</strong>
-    <%= @usuario.card.codigo %>
+    <%= 
+      if !@usuario.card.nil?
+        usuario.card.codigo
+      end 
+    %>
   </p>
 
   <p>
