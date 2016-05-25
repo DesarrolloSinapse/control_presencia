@@ -18,7 +18,7 @@ class CardsController < ApplicationController
   end
 
   # GET /cards/1/edit
-  def edit
+  def edit       
   end
 
   # POST /cards
@@ -27,22 +27,23 @@ class CardsController < ApplicationController
     @card = Card.new(card_params)
 
     respond_to do |format|
-      if @card.save
+      if @card.save              
+        
+        if !@card.usuario_id.blank?          
+          u = Usuario.find(@card.usuario_id)          
+          if u.card_id.nil?
+            u.card_id = @card.id
+            u.save
+          else
+            c = Card.find(u.card_id)
+            c.activa = 0
+            c.save
+            u.card_id = @card.id
+            u.save
+          end
+        end 
 
-        u = Usuario.find(@card.usuario_id)
-
-        if u.card_id.nil?
-          u.card_id = @card.id
-          u.save
-        else
-          c = Card.find(u.card_id)
-          c.activa = 0
-          c.save
-          u.card_id = @card.id
-          u.save
-        end
-
-        format.html { redirect_to @card, notice: 'Card was successfully created.' }
+        format.html { redirect_to @card, notice: 'La tarjeta se ha creado correctamente.' }
         format.json { render :show, status: :created, location: @card }
       else
         format.html { render :new }
@@ -56,7 +57,20 @@ class CardsController < ApplicationController
   def update
     respond_to do |format|
       if @card.update(card_params)
-        format.html { redirect_to @card, notice: 'Card was successfully updated.' }
+         if !@card.usuario_id.blank?          
+          u = Usuario.find(@card.usuario_id)          
+          if u.card_id.nil?
+            u.card_id = @card.id
+            u.save
+          else
+            c = Card.find(u.card_id)
+            c.activa = 0
+            c.save
+            u.card_id = @card.id
+            u.save
+          end
+        end         
+        format.html { redirect_to @card, notice: 'La tarjeta se ha actualizado correctamente.' }
         format.json { render :show, status: :ok, location: @card }
       else
         format.html { render :edit }
@@ -68,10 +82,17 @@ class CardsController < ApplicationController
   # DELETE /cards/1
   # DELETE /cards/1.json
   def destroy
-    @card.destroy
-    respond_to do |format|
-      format.html { redirect_to cards_url, notice: 'Card was successfully destroyed.' }
-      format.json { head :no_content }
+    if @card.usuario_id.blank?
+      @card.destroy
+      respond_to do |format|
+        format.html { redirect_to cards_url, notice: 'La tarjeta se ha eliminado correctamente.' }
+        format.json { head :no_content }
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to cards_url, notice: 'No se puede eliminar una tarjeta asociada a un usuario.' }
+        format.json { head :no_content }
+      end
     end
   end
 
