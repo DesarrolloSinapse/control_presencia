@@ -29,23 +29,11 @@
             <td class="cuerpo"><%= usuario.domicilio %></td>
             <td class="cuerpo"><%= usuario.email %></td>
             <td class="cuerpo"><%= usuario.centro %></td>
-<<<<<<< HEAD
-<<<<<<< HEAD
             <td class="cuerpo"><%=
- +              if !usuario.card.nil?
- +                usuario.card.codigo
- +              end
- +            %></td>
-=======
-            <td class="cuerpo"><%= usuario.card.codigo %></td>
->>>>>>> 69322e6b785d76193e97a1d8de90e28ec133ed83
-=======
-            <td class="cuerpo"><%=
-              if !usuario.card.nil?
-                usuario.card.codigo
-              end
-            %></td>
->>>>>>> a5652b7eafb7a22de982c745d5d67996e7795111
+               if !usuario.card.nil?
+                 usuario.card.codigo
+               end
+             %></td>            
             <td class="cuerpo">
               <% if usuario.dentro == 1 %>
               <%= r = "SÍ" %>
