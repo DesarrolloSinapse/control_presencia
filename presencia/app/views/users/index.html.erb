@@ -1,0 +1,102 @@
+<div class="text-center">
+	<h2 style="margin-bottom: 30px;"><b>Gestion de Usuarios</b></h2>
+
+	<div class="table-responsive" style="margin-left: 15px; margin-right: 15px">
+		<table class="table table-condensed table-hover">
+			<thead>
+				<tr>
+					<th class="encabezado success">Email</th>
+					<th class="encabezado info">Último acceso</th>
+					<th class="encabezado success">IP acceso</th>
+					<th class="encabezado info">Número de accesos</th>
+					<th class="encabezado success">Administrador</th>
+					<th colspan="1"></th>
+				</tr>
+			</thead>			
+			<tbody>
+				<% @usuarios.each do |u| %>
+				<tr>					
+					<td class="cuerpo"><%= u.email %></td>
+					<td class="cuerpo">
+						<%= 
+							if u.current_sign_in_at.nil?
+								c = ''
+							else
+								c = u.current_sign_in_at.to_datetime 
+								r = c.new_offset(1.0/24)
+								r.strftime("%F %T")
+							end
+						%>
+					</td>
+					<td class="cuerpo"><%= u.current_sign_in_ip %></td>
+					<td class="cuerpo"><%= u.sign_in_count %></td>
+					<td class="cuerpo">
+					<%=  
+						if u.admin == 1
+							r = 'Sí'
+						else
+							r = 'No'
+						end
+					%>
+					</td>
+					<td style="border-bottom: 1px solid #CCCCCC;">
+						<%= link_to 'Ver', u, class: 'btn btn-default btn-sm' %>
+						<%= link_to 'Editar', '/users/'+u.id.to_s+'/edit', class: 'btn btn-primary btn-sm' %>
+						<%= link_to 'Borrar', u, method: :delete, data: { confirm: "Desea borrar este usuario?"}, class: 'btn btn-danger btn-sm' %>	
+					</td>
+				</tr>
+				<% end %>
+			</tbody>
+		</table>
+	</div>
+	<br>
+	<%= link_to 'Nuevo Usuario', '/sign_up', class: 'btn btn-default' %>
+	<br>
+	<h2 style="margin-bottom: 30px;"><b>Configuración Correo Interno</b></h2>
+	<div class="table-responsive" style="margin-left: 15px; margin-right: 15px">
+		<table class="table table-condensed table-hover">
+			<thead>
+				<tr>
+					<th class="encabezado success">Email</th>
+					<th class="encabezado info">Contraseña</th>
+					<th class="encabezado success">Servidor SMTP</th>
+					<th class="encabezado info">Puerto de Conexión</th>
+					<th class="encabezado success">SSL</th>
+					<th colspan="1"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<% unless @email.nil?  %>
+				<tr>
+					<td class="cuerpo"><%= @email.email %></td>
+					<td class="cuerpo"><%= @email.password %></td>
+					<td class="cuerpo"><%= @email.smtp_server %></td>
+					<td class="cuerpo"><%= @email.puerto %></td>
+					<td class="cuerpo">
+						<%= if @email.ssl 
+								r = 'Sí'
+							else
+								r = 'No'
+							end
+							%>
+					</td>
+					<td style="border-bottom: 1px solid #CCCCCC;">
+						<%= link_to 'Editar', edit_email_path(@email), class: 'btn btn-primary btn-sm' %>
+						<%= link_to 'Borrar', @email, method: :delete, data: { confirm: "Desea borrar esta configuración?"}, class: 'btn btn-danger btn-sm' %>	
+					</td>
+				</tr>
+				<% end %>
+			</tbody>
+		</table>
+	</div>
+	<br>
+	<% if @email.nil? %>
+		<%= link_to 'Nueva configuración', new_email_path, class: 'btn btn-default'%><br>
+		<br>
+		<%= link_to 'Volver' , '/gestion', class: 'btn btn-danger'%>
+	<% else %>
+		<%= link_to 'Volver' , '/gestion', class: 'btn btn-danger'%>
+	<% end %>
+	<br>
+
+</div>

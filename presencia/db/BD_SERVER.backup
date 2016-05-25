@@ -1,0 +1,720 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.2.14
+-- Dumped by pg_dump version 9.2.14
+-- Started on 2016-04-08 10:29:15
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- TOC entry 181 (class 3079 OID 11727)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 2009 (class 0 OID 0)
+-- Dependencies: 181
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 174 (class 1259 OID 18110)
+-- Name: cards; Type: TABLE; Schema: public; Owner: sinapse; Tablespace: 
+--
+
+CREATE TABLE cards (
+    id integer NOT NULL,
+    codigo text,
+    usuario_id integer,
+    activa integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.cards OWNER TO sinapse;
+
+--
+-- TOC entry 173 (class 1259 OID 18108)
+-- Name: cards_id_seq; Type: SEQUENCE; Schema: public; Owner: sinapse
+--
+
+CREATE SEQUENCE cards_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.cards_id_seq OWNER TO sinapse;
+
+--
+-- TOC entry 2010 (class 0 OID 0)
+-- Dependencies: 173
+-- Name: cards_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: sinapse
+--
+
+ALTER SEQUENCE cards_id_seq OWNED BY cards.id;
+
+
+--
+-- TOC entry 180 (class 1259 OID 18177)
+-- Name: emails; Type: TABLE; Schema: public; Owner: sinapse; Tablespace: 
+--
+
+CREATE TABLE emails (
+    id integer NOT NULL,
+    email text,
+    password text,
+    smtp_server text,
+    puerto integer,
+    ssl boolean,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.emails OWNER TO sinapse;
+
+--
+-- TOC entry 179 (class 1259 OID 18175)
+-- Name: emails_id_seq; Type: SEQUENCE; Schema: public; Owner: sinapse
+--
+
+CREATE SEQUENCE emails_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.emails_id_seq OWNER TO sinapse;
+
+--
+-- TOC entry 2011 (class 0 OID 0)
+-- Dependencies: 179
+-- Name: emails_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: sinapse
+--
+
+ALTER SEQUENCE emails_id_seq OWNED BY emails.id;
+
+
+--
+-- TOC entry 172 (class 1259 OID 18054)
+-- Name: equipos; Type: TABLE; Schema: public; Owner: sinapse; Tablespace: 
+--
+
+CREATE TABLE equipos (
+    id integer NOT NULL,
+    nombre text,
+    zona text,
+    ip text,
+    activo integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    dns text
+);
+
+
+ALTER TABLE public.equipos OWNER TO sinapse;
+
+--
+-- TOC entry 171 (class 1259 OID 18052)
+-- Name: equipos_id_seq; Type: SEQUENCE; Schema: public; Owner: sinapse
+--
+
+CREATE SEQUENCE equipos_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.equipos_id_seq OWNER TO sinapse;
+
+--
+-- TOC entry 2012 (class 0 OID 0)
+-- Dependencies: 171
+-- Name: equipos_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: sinapse
+--
+
+ALTER SEQUENCE equipos_id_seq OWNED BY equipos.id;
+
+
+--
+-- TOC entry 178 (class 1259 OID 18151)
+-- Name: logs; Type: TABLE; Schema: public; Owner: sinapse; Tablespace: 
+--
+
+CREATE TABLE logs (
+    id integer NOT NULL,
+    tiempo_lectora timestamp without time zone,
+    tiempo_registro timestamp without time zone,
+    equipo_id integer,
+    card_id integer,
+    usuario_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    entrada boolean
+);
+
+
+ALTER TABLE public.logs OWNER TO sinapse;
+
+--
+-- TOC entry 177 (class 1259 OID 18149)
+-- Name: logs_id_seq; Type: SEQUENCE; Schema: public; Owner: sinapse
+--
+
+CREATE SEQUENCE logs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.logs_id_seq OWNER TO sinapse;
+
+--
+-- TOC entry 2013 (class 0 OID 0)
+-- Dependencies: 177
+-- Name: logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: sinapse
+--
+
+ALTER SEQUENCE logs_id_seq OWNED BY logs.id;
+
+
+--
+-- TOC entry 168 (class 1259 OID 17036)
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: sinapse; Tablespace: 
+--
+
+CREATE TABLE schema_migrations (
+    version character varying NOT NULL
+);
+
+
+ALTER TABLE public.schema_migrations OWNER TO sinapse;
+
+--
+-- TOC entry 176 (class 1259 OID 18132)
+-- Name: users; Type: TABLE; Schema: public; Owner: sinapse; Tablespace: 
+--
+
+CREATE TABLE users (
+    id integer NOT NULL,
+    email character varying DEFAULT ''::character varying NOT NULL,
+    encrypted_password character varying DEFAULT ''::character varying NOT NULL,
+    reset_password_token character varying,
+    reset_password_sent_at timestamp without time zone,
+    remember_created_at timestamp without time zone,
+    sign_in_count integer DEFAULT 0 NOT NULL,
+    current_sign_in_at timestamp without time zone,
+    last_sign_in_at timestamp without time zone,
+    current_sign_in_ip inet,
+    last_sign_in_ip inet,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    admin integer
+);
+
+
+ALTER TABLE public.users OWNER TO sinapse;
+
+--
+-- TOC entry 175 (class 1259 OID 18130)
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: sinapse
+--
+
+CREATE SEQUENCE users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_id_seq OWNER TO sinapse;
+
+--
+-- TOC entry 2014 (class 0 OID 0)
+-- Dependencies: 175
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: sinapse
+--
+
+ALTER SEQUENCE users_id_seq OWNED BY users.id;
+
+
+--
+-- TOC entry 170 (class 1259 OID 17045)
+-- Name: usuarios; Type: TABLE; Schema: public; Owner: sinapse; Tablespace: 
+--
+
+CREATE TABLE usuarios (
+    id integer NOT NULL,
+    codigo text,
+    nombre text,
+    apellidos text,
+    dni text,
+    domicilio text,
+    email text,
+    centro integer,
+    dentro integer,
+    activo integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    card_id integer
+);
+
+
+ALTER TABLE public.usuarios OWNER TO sinapse;
+
+--
+-- TOC entry 169 (class 1259 OID 17043)
+-- Name: usuarios_id_seq; Type: SEQUENCE; Schema: public; Owner: sinapse
+--
+
+CREATE SEQUENCE usuarios_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.usuarios_id_seq OWNER TO sinapse;
+
+--
+-- TOC entry 2015 (class 0 OID 0)
+-- Dependencies: 169
+-- Name: usuarios_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: sinapse
+--
+
+ALTER SEQUENCE usuarios_id_seq OWNED BY usuarios.id;
+
+
+--
+-- TOC entry 1852 (class 2604 OID 18113)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: sinapse
+--
+
+ALTER TABLE ONLY cards ALTER COLUMN id SET DEFAULT nextval('cards_id_seq'::regclass);
+
+
+--
+-- TOC entry 1858 (class 2604 OID 18180)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: sinapse
+--
+
+ALTER TABLE ONLY emails ALTER COLUMN id SET DEFAULT nextval('emails_id_seq'::regclass);
+
+
+--
+-- TOC entry 1851 (class 2604 OID 18057)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: sinapse
+--
+
+ALTER TABLE ONLY equipos ALTER COLUMN id SET DEFAULT nextval('equipos_id_seq'::regclass);
+
+
+--
+-- TOC entry 1857 (class 2604 OID 18154)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: sinapse
+--
+
+ALTER TABLE ONLY logs ALTER COLUMN id SET DEFAULT nextval('logs_id_seq'::regclass);
+
+
+--
+-- TOC entry 1853 (class 2604 OID 18135)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: sinapse
+--
+
+ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+
+
+--
+-- TOC entry 1850 (class 2604 OID 17048)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: sinapse
+--
+
+ALTER TABLE ONLY usuarios ALTER COLUMN id SET DEFAULT nextval('usuarios_id_seq'::regclass);
+
+
+--
+-- TOC entry 1995 (class 0 OID 18110)
+-- Dependencies: 174
+-- Data for Name: cards; Type: TABLE DATA; Schema: public; Owner: sinapse
+--
+
+COPY cards (id, codigo, usuario_id, activa, created_at, updated_at) FROM stdin;
+16	0000	1	1	2016-03-15 11:59:58.81738	2016-03-15 11:59:58.81738
+\.
+
+
+--
+-- TOC entry 2016 (class 0 OID 0)
+-- Dependencies: 173
+-- Name: cards_id_seq; Type: SEQUENCE SET; Schema: public; Owner: sinapse
+--
+
+SELECT pg_catalog.setval('cards_id_seq', 22, true);
+
+
+--
+-- TOC entry 2001 (class 0 OID 18177)
+-- Dependencies: 180
+-- Data for Name: emails; Type: TABLE DATA; Schema: public; Owner: sinapse
+--
+
+COPY emails (id, email, password, smtp_server, puerto, ssl, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2017 (class 0 OID 0)
+-- Dependencies: 179
+-- Name: emails_id_seq; Type: SEQUENCE SET; Schema: public; Owner: sinapse
+--
+
+SELECT pg_catalog.setval('emails_id_seq', 2, true);
+
+
+--
+-- TOC entry 1993 (class 0 OID 18054)
+-- Dependencies: 172
+-- Data for Name: equipos; Type: TABLE DATA; Schema: public; Owner: sinapse
+--
+
+COPY equipos (id, nombre, zona, ip, activo, created_at, updated_at, dns) FROM stdin;
+1	Equipo de prueba	ingenieria	192.168.15.200	1	2016-03-14 11:18:14.223047	2016-04-08 09:54:10	\N
+\.
+
+
+--
+-- TOC entry 2018 (class 0 OID 0)
+-- Dependencies: 171
+-- Name: equipos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: sinapse
+--
+
+SELECT pg_catalog.setval('equipos_id_seq', 6, true);
+
+
+--
+-- TOC entry 1999 (class 0 OID 18151)
+-- Dependencies: 178
+-- Data for Name: logs; Type: TABLE DATA; Schema: public; Owner: sinapse
+--
+
+COPY logs (id, tiempo_lectora, tiempo_registro, equipo_id, card_id, usuario_id, created_at, updated_at, entrada) FROM stdin;
+223	2016-04-04 14:42:52	2016-04-04 14:45:22	1	16	1	2016-04-04 14:45:22	2016-04-04 14:45:22	t
+224	2016-04-04 15:57:43	2016-04-04 16:00:13	1	16	1	2016-04-04 16:00:13	2016-04-04 16:00:13	f
+225	2016-04-04 15:59:56	2016-04-04 16:02:27	1	16	1	2016-04-04 16:02:27	2016-04-04 16:02:27	t
+226	2016-04-04 16:01:46	2016-04-04 16:09:32	1	16	1	2016-04-04 16:09:32	2016-04-04 16:09:32	f
+227	2016-04-04 16:03:01	2016-04-04 16:10:48	1	16	1	2016-04-04 16:10:48	2016-04-04 16:10:48	t
+228	2016-04-04 16:01:34	2016-04-04 16:17:21	1	16	1	2016-04-04 16:17:21	2016-04-04 16:17:21	f
+229	2016-04-04 16:02:55	2016-04-04 16:18:41	1	16	1	2016-04-04 16:18:41	2016-04-04 16:18:41	t
+230	2016-04-04 16:01:27	2016-04-04 16:22:01	1	16	1	2016-04-04 16:22:01	2016-04-04 16:22:01	f
+231	2016-04-04 16:01:24	2016-04-04 16:25:17	1	16	1	2016-04-04 16:25:17	2016-04-04 16:25:17	t
+232	2016-04-04 16:01:14	2016-04-04 16:27:45	1	16	1	2016-04-04 16:27:45	2016-04-04 16:27:45	f
+233	2016-04-04 16:01:21	2016-04-04 16:29:53	1	16	1	2016-04-04 16:29:53	2016-04-04 16:29:53	t
+234	2016-04-04 16:01:05	2016-04-04 16:33:01	1	16	1	2016-04-04 16:33:01	2016-04-04 16:33:01	f
+235	2016-04-04 16:03:02	2016-04-04 16:34:58	1	16	1	2016-04-04 16:34:58	2016-04-04 16:34:58	t
+236	2016-04-04 16:01:13	2016-04-04 16:36:32	1	16	1	2016-04-04 16:36:32	2016-04-04 16:36:32	f
+237	2016-04-04 16:01:33	2016-04-04 16:42:16	1	16	1	2016-04-04 16:42:16	2016-04-04 16:42:16	t
+238	2016-04-04 16:02:51	2016-04-04 16:43:34	1	16	1	2016-04-04 16:43:34	2016-04-04 16:43:34	f
+239	2016-04-04 16:51:25	2016-04-04 16:50:49	1	16	1	2016-04-04 16:50:49	2016-04-04 16:50:49	t
+240	2016-04-04 16:52:54	2016-04-04 16:52:19	1	16	1	2016-04-04 16:52:19	2016-04-04 16:52:19	f
+241	2016-04-04 16:56:03	2016-04-04 16:55:27	1	16	1	2016-04-04 16:55:27	2016-04-04 16:55:27	t
+242	2016-04-04 16:57:12	2016-04-04 16:56:36	1	16	1	2016-04-04 16:56:36	2016-04-04 16:56:36	f
+243	2016-04-05 09:23:30	2016-04-05 09:22:53	1	16	1	2016-04-05 09:22:53	2016-04-05 09:22:53	t
+244	2016-04-05 09:29:10	2016-04-05 09:28:32	1	16	1	2016-04-05 09:28:32	2016-04-05 09:28:32	f
+245	2016-04-05 09:36:13	2016-04-05 09:36:12	1	16	1	2016-04-05 09:36:12	2016-04-05 09:36:12	t
+246	2016-04-05 09:37:16	2016-04-05 09:37:15	1	16	1	2016-04-05 09:37:15	2016-04-05 09:37:15	f
+247	2016-04-05 09:39:47	2016-04-05 09:39:47	1	16	1	2016-04-05 09:39:47	2016-04-05 09:39:47	t
+248	2016-04-05 09:41:22	2016-04-05 09:41:21	1	16	1	2016-04-05 09:41:21	2016-04-05 09:41:21	f
+249	2016-04-05 09:49:16	2016-04-05 09:49:15	1	16	1	2016-04-05 09:49:15	2016-04-05 09:49:15	t
+250	2016-04-05 09:51:58	2016-04-05 09:51:57	1	16	1	2016-04-05 09:51:57	2016-04-05 09:51:57	f
+251	2016-04-05 09:57:19	2016-04-05 09:57:18	1	16	1	2016-04-05 09:57:18	2016-04-05 09:57:18	t
+252	2016-04-05 10:00:31	2016-04-05 10:00:30	1	16	1	2016-04-05 10:00:30	2016-04-05 10:00:30	f
+253	2016-04-05 10:03:32	2016-04-05 10:03:31	1	16	1	2016-04-05 10:03:31	2016-04-05 10:03:31	t
+254	2016-04-05 10:04:41	2016-04-05 10:04:40	1	16	1	2016-04-05 10:04:40	2016-04-05 10:04:40	f
+255	2016-04-05 10:07:13	2016-04-05 10:07:13	1	16	1	2016-04-05 10:07:13	2016-04-05 10:07:13	t
+256	2016-04-05 10:08:23	2016-04-05 10:08:22	1	16	1	2016-04-05 10:08:22	2016-04-05 10:08:22	f
+257	2016-04-05 10:11:53	2016-04-05 10:11:52	1	16	1	2016-04-05 10:11:52	2016-04-05 10:11:52	t
+258	2016-04-05 10:12:55	2016-04-05 10:12:54	1	16	1	2016-04-05 10:12:54	2016-04-05 10:12:54	f
+259	2016-04-05 13:16:30	2016-04-05 13:16:30	1	16	1	2016-04-05 13:16:30	2016-04-05 13:16:30	t
+260	2016-04-05 13:51:16	2016-04-05 13:51:15	1	16	1	2016-04-05 13:51:15	2016-04-05 13:51:15	f
+261	2016-04-07 10:09:44	2016-04-07 10:09:41	1	16	1	2016-04-07 10:09:41	2016-04-07 10:09:41	t
+262	2016-04-07 14:46:46	2016-04-07 14:46:47	1	16	1	2016-04-07 14:46:47	2016-04-07 14:46:47	f
+263	2016-04-08 09:29:05	2016-04-08 09:29:04	1	16	1	2016-04-08 09:29:04	2016-04-08 09:29:04	t
+264	2016-04-08 09:54:11	2016-04-08 09:54:10	1	16	1	2016-04-08 09:54:10	2016-04-08 09:54:10	f
+\.
+
+
+--
+-- TOC entry 2019 (class 0 OID 0)
+-- Dependencies: 177
+-- Name: logs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: sinapse
+--
+
+SELECT pg_catalog.setval('logs_id_seq', 264, true);
+
+
+--
+-- TOC entry 1989 (class 0 OID 17036)
+-- Dependencies: 168
+-- Data for Name: schema_migrations; Type: TABLE DATA; Schema: public; Owner: sinapse
+--
+
+COPY schema_migrations (version) FROM stdin;
+20160310155145
+20160314105333
+20160314112527
+20160314123610
+20160314130424
+20160314142910
+20160316090642
+20160321112023
+20160321113125
+20160321133926
+20160330102039
+20160331063253
+\.
+
+
+--
+-- TOC entry 1997 (class 0 OID 18132)
+-- Dependencies: 176
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: sinapse
+--
+
+COPY users (id, email, encrypted_password, reset_password_token, reset_password_sent_at, remember_created_at, sign_in_count, current_sign_in_at, last_sign_in_at, current_sign_in_ip, last_sign_in_ip, created_at, updated_at, admin) FROM stdin;
+1	admin@tcsa.es	$2a$10$WCEjuYU.bPZEI2bxUAbmL.4etLYTsDRhlGeemE5q2iOXBjf5byZ82	\N	\N	\N	42	2016-04-08 07:50:26.397561	2016-04-07 12:48:02.859564	::1	::1	2016-03-16 16:19:08.527691	2016-04-08 07:50:26.403035	1
+\.
+
+
+--
+-- TOC entry 2020 (class 0 OID 0)
+-- Dependencies: 175
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: sinapse
+--
+
+SELECT pg_catalog.setval('users_id_seq', 5, true);
+
+
+--
+-- TOC entry 1991 (class 0 OID 17045)
+-- Dependencies: 170
+-- Data for Name: usuarios; Type: TABLE DATA; Schema: public; Owner: sinapse
+--
+
+COPY usuarios (id, codigo, nombre, apellidos, dni, domicilio, email, centro, dentro, activo, created_at, updated_at, card_id) FROM stdin;
+1	0000	usuario	de prueba	12345678A	Su Casa nº 7	email.test@email.com	10	0	1	2016-03-14 15:37:03.015035	2016-03-30 09:26:39.955461	16
+\.
+
+
+--
+-- TOC entry 2021 (class 0 OID 0)
+-- Dependencies: 169
+-- Name: usuarios_id_seq; Type: SEQUENCE SET; Schema: public; Owner: sinapse
+--
+
+SELECT pg_catalog.setval('usuarios_id_seq', 3, true);
+
+
+--
+-- TOC entry 1865 (class 2606 OID 18118)
+-- Name: cards_pkey; Type: CONSTRAINT; Schema: public; Owner: sinapse; Tablespace: 
+--
+
+ALTER TABLE ONLY cards
+    ADD CONSTRAINT cards_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1877 (class 2606 OID 18185)
+-- Name: emails_pkey; Type: CONSTRAINT; Schema: public; Owner: sinapse; Tablespace: 
+--
+
+ALTER TABLE ONLY emails
+    ADD CONSTRAINT emails_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1863 (class 2606 OID 18062)
+-- Name: equipos_pkey; Type: CONSTRAINT; Schema: public; Owner: sinapse; Tablespace: 
+--
+
+ALTER TABLE ONLY equipos
+    ADD CONSTRAINT equipos_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1875 (class 2606 OID 18156)
+-- Name: logs_pkey; Type: CONSTRAINT; Schema: public; Owner: sinapse; Tablespace: 
+--
+
+ALTER TABLE ONLY logs
+    ADD CONSTRAINT logs_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1870 (class 2606 OID 18143)
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: sinapse; Tablespace: 
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1861 (class 2606 OID 17053)
+-- Name: usuarios_pkey; Type: CONSTRAINT; Schema: public; Owner: sinapse; Tablespace: 
+--
+
+ALTER TABLE ONLY usuarios
+    ADD CONSTRAINT usuarios_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1866 (class 1259 OID 18119)
+-- Name: index_cards_on_usuario_id; Type: INDEX; Schema: public; Owner: sinapse; Tablespace: 
+--
+
+CREATE INDEX index_cards_on_usuario_id ON cards USING btree (usuario_id);
+
+
+--
+-- TOC entry 1871 (class 1259 OID 18158)
+-- Name: index_logs_on_card_id; Type: INDEX; Schema: public; Owner: sinapse; Tablespace: 
+--
+
+CREATE INDEX index_logs_on_card_id ON logs USING btree (card_id);
+
+
+--
+-- TOC entry 1872 (class 1259 OID 18157)
+-- Name: index_logs_on_equipo_id; Type: INDEX; Schema: public; Owner: sinapse; Tablespace: 
+--
+
+CREATE INDEX index_logs_on_equipo_id ON logs USING btree (equipo_id);
+
+
+--
+-- TOC entry 1873 (class 1259 OID 18159)
+-- Name: index_logs_on_usuario_id; Type: INDEX; Schema: public; Owner: sinapse; Tablespace: 
+--
+
+CREATE INDEX index_logs_on_usuario_id ON logs USING btree (usuario_id);
+
+
+--
+-- TOC entry 1867 (class 1259 OID 18144)
+-- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: sinapse; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
+
+
+--
+-- TOC entry 1868 (class 1259 OID 18145)
+-- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: sinapse; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_users_on_reset_password_token ON users USING btree (reset_password_token);
+
+
+--
+-- TOC entry 1859 (class 1259 OID 17042)
+-- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: sinapse; Tablespace: 
+--
+
+CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (version);
+
+
+--
+-- TOC entry 1881 (class 2606 OID 18165)
+-- Name: fk_rails_2c80075c3c; Type: FK CONSTRAINT; Schema: public; Owner: sinapse
+--
+
+ALTER TABLE ONLY logs
+    ADD CONSTRAINT fk_rails_2c80075c3c FOREIGN KEY (card_id) REFERENCES cards(id);
+
+
+--
+-- TOC entry 1879 (class 2606 OID 18120)
+-- Name: fk_rails_64f9ea68cd; Type: FK CONSTRAINT; Schema: public; Owner: sinapse
+--
+
+ALTER TABLE ONLY cards
+    ADD CONSTRAINT fk_rails_64f9ea68cd FOREIGN KEY (usuario_id) REFERENCES usuarios(id);
+
+
+--
+-- TOC entry 1880 (class 2606 OID 18160)
+-- Name: fk_rails_9d0ffd3a84; Type: FK CONSTRAINT; Schema: public; Owner: sinapse
+--
+
+ALTER TABLE ONLY logs
+    ADD CONSTRAINT fk_rails_9d0ffd3a84 FOREIGN KEY (equipo_id) REFERENCES equipos(id);
+
+
+--
+-- TOC entry 1878 (class 2606 OID 18125)
+-- Name: fk_rails_c28bec067f; Type: FK CONSTRAINT; Schema: public; Owner: sinapse
+--
+
+ALTER TABLE ONLY usuarios
+    ADD CONSTRAINT fk_rails_c28bec067f FOREIGN KEY (card_id) REFERENCES cards(id);
+
+
+--
+-- TOC entry 1882 (class 2606 OID 18170)
+-- Name: fk_rails_e76cd331c8; Type: FK CONSTRAINT; Schema: public; Owner: sinapse
+--
+
+ALTER TABLE ONLY logs
+    ADD CONSTRAINT fk_rails_e76cd331c8 FOREIGN KEY (usuario_id) REFERENCES usuarios(id);
+
+
+--
+-- TOC entry 2008 (class 0 OID 0)
+-- Dependencies: 5
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2016-04-08 10:29:16
+
+--
+-- PostgreSQL database dump complete
+--
+

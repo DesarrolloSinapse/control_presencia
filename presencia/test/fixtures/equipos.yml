@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nombre: MyText
+  zona: MyText
+  ip: MyText
+  activo: 1
+
+two:
+  nombre: MyText
+  zona: MyText
+  ip: MyText
+  activo: 1

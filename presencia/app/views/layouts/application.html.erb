@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Presencia</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row" style="margin-top: 10px; margin-bottom: 10px;">
+		<div class="col-md-2 col-xs-2 col-sm-2 col-lg-2">
+			<div class="text-left">
+				<%= image_tag("logo_tcsa2.png", alt: "TCSA") %>
+			</div>
+		</div>
+		<div class="col-md-10 col-xs-10 col-sm-10 col-lg-10">
+			<div class="text-right">
+				<%= image_tag("logo_sinapse2.png", alt: "Sinapse") %>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="barra">
+	<p style="margin-right: 10px; padding-bottom: 10px; padding-top: 10px;">
+		<%=
+			if user_signed_in?
+				u = User.find(current_user)
+				u.email
+			end
+		%> | 
+		<%=
+			if user_signed_in?
+				link_to "Cerrar Sesión" , 'devise/users/sign_out', method: :delete , class: 'btn-link', style: 'color: black; margin-right:10px;'
+			end
+			
+		%>
+		<b><%= Time.now.strftime("%d-%m-%Y %H:%M:%S") %></b>
+	</p>
+</div>
+
+<%= yield %>
+
+</body>
+</html>

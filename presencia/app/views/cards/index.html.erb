@@ -1,0 +1,43 @@
+<div class="text-center">
+
+<p id="notice"><%= notice %></p>
+
+<h2 style="margin-bottom: 30px;"><b>Gestionar Tarjetas<b></h2>
+<div class="table-responsive" style="margin-left: 15px; margin-right: 15px;">
+  <table class="table table-condensed table-hover">
+    <thead>
+      <tr>
+        <th class="encabezado success">Codigo</th>
+        <th class="encabezado info">Usuario</th>
+        <th class="encabezado success">Activa</th>
+        <th colspan="1"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @cards.each do |card| %>
+        <tr>
+          <td class='cuerpo'><%= card.codigo %></td>
+          <td class="cuerpo"><%= card.usuario.nombre + ' ' + card.usuario.apellidos %></td>
+          <td class="cuerpo">
+            <% if card.activa == 1 %>
+            <%= r = "SÍ" %>
+            <% else %>
+            <%= r = "NO" %>
+            <% end %>
+          </td>
+          <td style="border-bottom: 1px solid #CCCCCC;">
+            <%= link_to 'Ver', card , class: 'btn btn-default btn-sm' %>
+            <%= link_to 'Editar', edit_card_path(card) , class: 'btn btn-primary btn-sm' %>
+            <%= link_to 'Borrar', card, method: :delete, data: { confirm: 'Are you sure?' } , class: 'btn btn-danger btn-sm' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<br>
+
+<%= link_to 'Nueva Tarjeta', new_card_path , class: 'btn btn-default'%>
+<%= link_to 'Volver', {controller: "main", action: "gestion"}, {class: "btn btn-danger"} %>
+</div>

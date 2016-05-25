@@ -1,0 +1,27 @@
+<div class="text-center">
+
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Codigo:</strong>
+  <%= @card.codigo %>
+</p>
+
+<p>
+  <strong>Usuario:</strong>
+  <%= @card.usuario.nombre + ' ' + @card.usuario.apellidos %>
+</p>
+
+<p>
+  <strong>Activa:</strong>
+  <% if @card.activa == 1 %>
+  <%= r = "SÍ" %>
+  <% else %>
+  <%= r = "NO" %>
+  <% end %>
+</p>
+
+<%= link_to 'Editar', edit_card_path(@card) , class: 'btn btn-primary' %> 
+<%= link_to 'Volver', cards_path , class: 'btn btn-danger' %>
+
+</div>

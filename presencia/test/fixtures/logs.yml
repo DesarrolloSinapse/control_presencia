@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  tiempo_lectora: 2016-03-21 12:31:25
+  tiempo_registro: 2016-03-21 12:31:25
+  equipo_id: 
+  card_id: 
+  usuario_id: 
+
+two:
+  tiempo_lectora: 2016-03-21 12:31:25
+  tiempo_registro: 2016-03-21 12:31:25
+  equipo_id: 
+  card_id: 
+  usuario_id: 
