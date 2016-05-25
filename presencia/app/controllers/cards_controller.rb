@@ -27,8 +27,7 @@ class CardsController < ApplicationController
     @card = Card.new(card_params)
 
     respond_to do |format|
-      if @card.save              
-        
+      if @card.save
         if !@card.usuario_id.blank?          
           u = Usuario.find(@card.usuario_id)          
           if u.card_id.nil?
