@@ -1,0 +1,33 @@
+<%= form_for(@card) do |f| %>
+  <% if @card.errors.any? %>
+    <div id="error_explanation" class="errores">
+      <h4><b><u>Errores Encontrados</u></b></h4>
+      <% @card.errors.full_messages.each do |message| %>
+        <%= message %><br>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :codigo %><br>
+    <%= f.text_field :codigo , class: 'form-control'%>
+  </div>
+  <div class="field">
+    <%= f.label :usuario_id %><br>
+    <%= f.select :usuario_id , Usuario.all.collect {|u| [u.nombre+' '+u.apellidos, u.id]} , {include_blank: true} , class: "form-control" %>
+  </div>
+  <div class="field">
+    <%= f.label :activa %><br>
+    <div class="radio-inline">
+      <%= f.radio_button :activa, 1 %> SÍ
+    </div>
+    <div class="radio-inline">
+      <%= f.radio_button :activa, 0 %> NO
+    </div>
+  </div>
+  <br>
+  <div class="actions">
+    <%= f.submit "Aceptar", class: 'btn btn-default'%>
+  </div>
+  <br>
+<% end %>

@@ -1,0 +1,49 @@
+<div class="text-center">
+  <p id="notice"><%= notice %></p>
+
+  <h2 style="margin-bottom: 30px;"><b>Gestión de Equipos</b></h2>
+
+  <div class="table-responsive" style="margin-left: 15px; margin-right: 15px;">
+    <table class="table table-condensed table-hover">
+      <thead>
+        <tr>
+          <th class="encabezado success">Nombre</th>
+          <th class="encabezado info">Zona</th>
+          <th class="encabezado success">Ip</th>
+          <th class="encabezado info">Activo</th>
+          <th class="encabezado success">DNS</th>
+          <th class="encabezado info">Último Mensaje</th>
+          <th colspan="1"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @equipos.each do |equipo| %>
+          <tr>
+            <td class="cuerpo"><%= equipo.nombre %></td>
+            <td class="cuerpo"><%= equipo.zona %></td>
+            <td class="cuerpo"><%= equipo.ip %></td>
+            <td class="cuerpo">
+              <% if equipo.activo == 1 %>
+              <%= r = "SÍ" %>
+              <% else %>
+              <%= r = "NO" %>
+              <% end %>
+            </td>
+            <td class="cuerpo"><%= equipo.dns %></td>
+            <td class="cuerpo"><%= equipo.updated_at.strftime("%F %T") %></td>
+            <td style="border-bottom: 1px solid #CCCCCC;">
+              <%= link_to 'Ver', equipo , class: "btn btn-default btn-sm"%>
+              <%= link_to 'Editar', edit_equipo_path(equipo) , class: "btn btn-primary btn-sm" %>
+              <%= link_to 'Borrar', equipo, method: :delete, data: { confirm: 'Are you sure?' } , class: "btn btn-danger btn-sm" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <br>
+
+  <%= link_to 'Nuevo Equipo', new_equipo_path , class: "btn btn-default" %>
+  <%= link_to 'Volver', {controller: "main", action: "gestion"}, {class: "btn btn-danger"} %>
+</div>

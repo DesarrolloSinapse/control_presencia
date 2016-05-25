@@ -1,0 +1,9 @@
+<div class="text-center">
+
+<p>Bienvenido <%= @email %></p>
+
+<p>Puede confirmar su cuenta en el enlace que encontrará a continuación</p>
+
+<p><%= link_to 'Confirmar Cuenta', confirmation_url(@resource, confirmation_token: @token, class: 'btn btn-success' %></p>
+
+</div>

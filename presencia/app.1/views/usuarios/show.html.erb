@@ -1,0 +1,68 @@
+<div class="text-center">
+  <p id="notice"><%= notice %></p>
+
+  <p>
+    <strong>Codigo:</strong>
+    <%= @usuario.codigo %>
+  </p>
+
+  <p>
+    <strong>Nombre:</strong>
+    <%= @usuario.nombre %>
+  </p>
+
+  <p>
+    <strong>Apellidos:</strong>
+    <%= @usuario.apellidos %>
+  </p>
+
+  <p>
+    <strong>Dni:</strong>
+    <%= @usuario.dni %>
+  </p>
+
+  <p>
+    <strong>Domicilio:</strong>
+    <%= @usuario.domicilio %>
+  </p>
+
+  <p>
+    <strong>Email:</strong>
+    <%= @usuario.email %>
+  </p>
+
+  <p>
+    <strong>Centro:</strong>
+    <%= @usuario.centro %>
+  </p>
+
+  <p>
+    <strong>Tarjeta:</strong>
+    <%= 
+       if !@usuario.card.nil?
+         usuario.card.codigo
+       end 
+     %>
+  </p>
+
+  <p>
+    <strong>Dentro:</strong>
+    <% if @usuario.dentro == 1 %>
+    <%= r = "SÍ" %>
+    <% else %>
+    <%= r = "NO" %>
+    <% end %>
+  </p>
+
+  <p>
+    <strong>Activo:</strong>
+    <% if @usuario.activo == 1 %>
+    <%= r = "SÍ" %>
+    <% else %>
+    <%= r = "NO" %>
+    <% end %>
+  </p>
+
+  <%= link_to 'Editar', edit_usuario_path(@usuario) , class: 'btn btn-primary'%> 
+  <%= link_to 'Volver', usuarios_path, class: 'btn btn-danger' %>
+</div>
