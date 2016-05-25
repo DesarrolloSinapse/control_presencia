@@ -111,7 +111,7 @@ def envio_email(asunto, mensaje):
 
 		server.login(servidor[1],servidor[2])
 
-		cursor.execute("SELECT * FROM users WHERE admin")
+		cursor.execute("SELECT * FROM users WHERE admin = 1")
 		administradores = cursor.fetchall()
 		for admin in administradores:
 			msg = '''From: SERVIDOR CONTROL DE PRESENCIA <%s>
