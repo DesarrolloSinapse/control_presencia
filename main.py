@@ -262,7 +262,7 @@ class Auxiliar(http.server.BaseHTTPRequestHandler):
 
 		
 def main():
-	server_add = ('', 8000)
+	server_add = ('', 9000)
 	httpd = http.server.HTTPServer(server_add,Auxiliar)
 	httpd.serve_forever()
 
