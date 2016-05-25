@@ -6,8 +6,5 @@
 
 # Ignoramos directorio visual studio code
 /.vscode
-
-
 # Ignore all logfiles and tempfiles.
 /getlist.xml
-/start_script.cmd
