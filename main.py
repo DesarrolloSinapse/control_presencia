@@ -120,12 +120,12 @@ def envio_email(asunto, mensaje):
 			Content-Type: text/html
 			Subject: %s
 			%s
-			''' % (servidor[1], admin[1], admin[1], asunto, cuerpo)
+			''' % (servidor[1], admin[1], admin[1], asunto, mensaje)
 
 			server.sendmail(servidor[1],admin[1],msg)
-			print("\n-----------------------------------\n"+asunto+"\n\n"+cuerpo+"\n-----------------------------------\n")
+			#print("\n-----------------------------------\n"+asunto+"\n\n"+mensaje+"\n-----------------------------------\n")
 	else:
-		print("\n-----------------------------------\n"+asunto+"\n\n"+cuerpo+"\n-----------------------------------\n")
+		print("\n-----------------------------------\n"+asunto+"\n\n"+mensaje+"\n-----------------------------------\n")
 
 
 def genera_xml(ip, t_lectora, cod_usuario, cod_tarjeta):
