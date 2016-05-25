@@ -18,7 +18,11 @@
       <% @cards.each do |card| %>
         <tr>
           <td class='cuerpo'><%= card.codigo %></td>
-          <td class="cuerpo"><%= card.usuario.nombre + ' ' + card.usuario.apellidos %></td>
+          <td class="cuerpo"><%=
+            if !card.usuario.nil? 
+              card.usuario.nombre + ' ' + card.usuario.apellidos 
+            end
+          %></td>
           <td class="cuerpo">
             <% if card.activa == 1 %>
             <%= r = "SÍ" %>

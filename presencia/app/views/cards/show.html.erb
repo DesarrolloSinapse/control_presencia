@@ -9,7 +9,11 @@
 
 <p>
   <strong>Usuario:</strong>
-  <%= @card.usuario.nombre + ' ' + @card.usuario.apellidos %>
+  <%=
+  if !@card.usuario.nil? 
+    @card.usuario.nombre + ' ' + @card.usuario.apellidos 
+  end 
+  %>
 </p>
 
 <p>
