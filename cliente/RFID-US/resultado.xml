@@ -1,0 +1,11 @@
+<resultado>
+    <dispositivo>12</dispositivo>
+    <lista>
+        <aula>
+            <codigo>2143</codigo>
+            <edificio>01</edificio>
+            <tipo>4</tipo>
+            <nombre>aula302</nombre>
+        </aula>
+    </lista>
+</resultado>

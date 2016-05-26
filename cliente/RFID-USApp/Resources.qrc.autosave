@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/new/es-resources" lang="spanish">
+        <file>Resources/Logo.gif</file>
+        <file>Resources/exclamation_mark.jpg</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,203 @@
+import psycopg2
+import sys
+import httplib2
+import xml.etree.cElementTree as ET
+import datetime
+import time
+from threading import Thread
+import RPi.GPIO as GPIO
+import MFRC522
+import signal
+import os
+
+continue_reading = True
+
+# Capture SIGINT for cleanup when the script is aborted
+def end_read(signal,frame):
+    global continue_reading
+    print "Ctrl+C captured, ending read."
+    continue_reading = False
+    GPIO.cleanup()
+
+
+def create_getlist(serverip,fechahora,edificio,tipoaula,aula):
+  root = ET.Element("horfeus")
+  doc = ET.SubElement(root, "firma")
+
+  field1 = ET.SubElement(doc, "ip")
+  field1.text = serverip
+  field2 = ET.SubElement(doc, "TipoCliente")
+  field2.text = "4"
+  field3 = ET.SubElement(doc, "tiempo")
+  field3.text = fechahora
+  field4 = ET.SubElement(doc, "edificio")
+  field4.text = edificio
+  field5 = ET.SubElement(doc, "TipoAula")
+  field5.text = tipoaula
+  field6 = ET.SubElement(doc, "aula")
+  field6.text = aula
+
+  tree = ET.ElementTree(root)
+  tree.write("getlist.xml")
+  getlist = ET.tostring(root)
+  return getlist
+
+def create_registro(iddispositivo,registro,fechahora,documento,nombre):
+  doc = ET.Element("resultado")
+
+  field1 = ET.SubElement(doc, "dispositivo")
+  field1.text = iddispositivo
+  field2 = ET.SubElement(doc, "registro")
+  field2.text = registro
+  field3 = ET.SubElement(doc, "tiempo")
+  field3.text = fechahora
+  field4 = ET.SubElement(doc, "documento")
+  field4.text = documento
+  field5 = ET.SubElement(doc, "nombre")
+  field5.text = nombre
+
+  tree = ET.ElementTree(doc)
+  tree.write("registro.xml")
+  registro = ET.tostring(doc) 
+
+  return registro
+
+
+def arranca_rails(myip):
+	command = "sudo sh execrails.sh " + myip
+	print command
+	os.system(command)
+
+def main():
+	con = psycopg2.connect(host='localhost', database='BD_RFID', user='sinapse', password='napse1si')
+	cur = con.cursor()
+	query = "SELECT ipdevice FROM a_serverconfigurations"
+	cur.execute(query)
+	resultado = cur.fetchone()
+	myip=str(resultado[0])
+	cur.close()
+	t1 = Thread(target=arranca_rails, args=(myip,))
+	t1.start()
+	
+	# Hook the SIGINT
+	signal.signal(signal.SIGINT, end_read)
+	
+	# Create an object of the class MFRC522
+	MIFAREReader = MFRC522.MFRC522()
+	
+	# Welcome message
+	print "Welcome to the MFRC522 data read example"
+	print "Press Ctrl-C to stop."
+	
+	# This loop keeps checking for chips. If one is near it will get the UID and authenticate
+	while continue_reading:
+	    
+	    # Scan for cards    
+	    (status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
+	
+	    # If a card is found
+	    if status == MIFAREReader.MI_OK:
+	        print "Card detected"
+	    
+	    # Get the UID of the card
+	    (status,uid) = MIFAREReader.MFRC522_Anticoll()
+	
+	    # If we have the UID, continue
+	    if status == MIFAREReader.MI_OK:
+	
+	        # Print UID
+	        print "Card read UID: "+str(uid[0])+","+str(uid[1])+","+str(uid[2])+","+str(uid[3])
+	    
+	        # This is the default key for authentication
+	        key = [0xFF,0xFF,0xFF,0xFF,0xFF,0xFF]
+	        
+	        # Select the scanned tag
+	        MIFAREReader.MFRC522_SelectTag(uid)
+	
+	        # Authenticate
+	        status = MIFAREReader.MFRC522_Auth(MIFAREReader.PICC_AUTHENT1A, 8, key, uid)
+	
+	        # Check if authenticated
+	        if status == MIFAREReader.MI_OK:
+	            MIFAREReader.MFRC522_Read(8)
+	            MIFAREReader.MFRC522_StopCrypto1()
+	        else:
+	            print "Authentication error"
+
+ 
+		  #con = psycopg2.connect(host='localhost', database='BD_RFID', user='sinapse', password='napse1si')
+		  #cur = con.cursor()
+		  #query = "SELECT a_url FROM a_serverconfiguration"
+		
+		  #cur.execute(query)
+		  #resultado = cur.fetchone()
+		  #a_url=str(resultado[0])
+		
+		  #query = "SELECT d_edificio,d_aula,d_tipoaula FROM d_aulas INNER JOIN d_auladispositivo ON da_idaula=d_id INNER JOIN a_deviceconfiguration ON ad_id=da_iddispositivo"
+		
+		  #cur.execute(query)
+		  #resultado = cur.fetchone()
+		  
+		  #edificio=str(resultado[0])
+		  #aula=str(resultado[1])
+		  #tipoaula=str(resultado[2])
+		  
+		  #cur.close()
+		
+		  #h = httplib2.Http(".cache")
+		  #(resp_headers, content) = h.request("http://localhost:8080", 
+					    #"GET", body="This is text",
+		                            #headers={'content-type':'text/plain'} )
+		
+		  #registro = create_registro("iddispositivo","registro",datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S"),"documento","nombre")
+		 
+		  #(resp_headers, content) = h.request("http://localhost:8080",
+		                            #"GET", body=registro,
+		                            #headers={'content-type':'text/plain'} )
+		
+		  #print resp_headers
+		  #print content
+		
+		  #print registro
+
+def get_list():
+  while True:
+    con = psycopg2.connect(host='localhost', database='BD_RFID', user='sinapse', password='napse1si')
+
+    cur = con.cursor()
+    query = "SELECT url_server FROM a_serverconfigurations"
+  
+    cur.execute(query)
+    resultado = cur.fetchone()
+    a_url=str(resultado[0])
+    query = "SELECT d_edificio,d_aula,d_tipoaula FROM d_aulas INNER JOIN d_auladispositivo ON da_idaula=d_id INNER JOIN a_deviceconfiguration ON ad_id=da_iddispositivo"
+
+    cur.execute(query)
+    resultado = cur.fetchone()
+  
+    edificio=str(resultado[0])
+    aula=str(resultado[1])
+    tipoaula=str(resultado[2])
+
+    query = "SELECT refreshtime FROM a_serverconfigurations LIMIT 1"
+    cur.execute(query)
+    resultado = cur.fetchone()
+
+    refreshtime=str(resultado[0])
+
+    cur.close()
+    getlist = create_getlist(a_url,datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S"),edificio,tipoaula,aula)
+
+    h = httplib2.Http(".cache")
+    (resp_headers, content) = h.request("http://localhost:8080",
+                            "GET", body=getlist,
+                            headers={'content-type':'text/plain'} )
+    print "Vuelto a ejecutar get_list"
+    print content
+    print getlist
+  
+    time.sleep(float(refreshtime))
+
+main()
+t = Thread(target=get_list, args=())
+t.start()

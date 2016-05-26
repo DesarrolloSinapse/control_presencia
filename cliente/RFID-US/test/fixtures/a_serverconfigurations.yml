@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ipdevice: 
+  networkmask: 
+  gateway: 
+  url_server: MyText
+  refreshtime: 1
+
+two:
+  ipdevice: 
+  networkmask: 
+  gateway: 
+  url_server: MyText
+  refreshtime: 1

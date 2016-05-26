@@ -1,0 +1,45 @@
+<%= form_for(@a_serverconfiguration) do |f| %>
+  <% if @a_serverconfiguration.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@a_serverconfiguration.errors.count, "error") %> prohibited this a_serverconfiguration from being saved:</h2>
+
+      <ul>
+      <% @a_serverconfiguration.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :IP_del_dispositivo %><br>
+    <%= f.text_field :ipdevice %>
+  </div>
+  <div class="field">
+    <%= f.label :Máscara_de_red %><br>
+    <%= f.text_field :networkmask %>
+  </div>
+  <div class="field">
+    <%= f.label :Puerta_de_enlace %><br>
+    <%= f.text_field :gateway %>
+  </div>
+  <div class="field">
+    <%= f.label :Dns %><br>
+    <%= f.text_field :dns1 %>
+  </div>
+  <div class="field">
+    <%= f.label :Dirección_URL_del_servidor %><br>
+    <%= f.text_area :url_server %>
+  </div>
+  <div class="field">
+    <%= f.label :Tasa_de_refresco %><br>
+    <%= f.number_field :refreshtime %>
+  </div>
+    <div class="field">
+    <%= f.label :Tasa_de_refresco_en_caso_de_error %><br>
+    <%= f.number_field :refreshtime_error %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Guardar cambios" %>
+  </div>
+<% end %>

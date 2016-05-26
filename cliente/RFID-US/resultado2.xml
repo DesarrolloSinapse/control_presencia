@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<horfeus>
+	<firma>
+	<IP>150.214.143.117</IP>
+	<TipoCliente>4</TipoCliente>
+	<tiempo>24/09/2014 12:34:26</tiempo>
+	<edificio>48</edificio>
+	<TipoAula>4</TipoAula>
+	<aula>RM14IFIQ</aula>
+	<serie>00369512</serie>
+	<resultado>
+	<registro>3615</registro>
+	<tiempoServidor>24/09/2014 14:29:28</tiempoServidor>
+	<documento>28766639</documento>
+	<nombre>D\xc3\xb1a. MARIA DEL CARMEN ROMERO TERNERO</nombre>
+	</resultado>
+</firma>
+</horfeus>

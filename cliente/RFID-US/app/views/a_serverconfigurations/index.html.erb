@@ -1,0 +1,56 @@
+<h1>Configuración de control de presencia Sinapse</h1>
+<tbody>
+<div class="Tabla1" >
+<table border="1" style="width:300px">
+<caption><b>Configuración de red</b></caption>
+  
+    <tr>
+      <td><b>IP dispositivo</b></td>
+      <td><b>Máscara de red</b></td>
+      <td><b>Puerta de enlace</b></td>
+	  <td><b>DNS</b></td>
+         </tr>
+  
+    <% @a_serverconfigurations.each do |a_serverconfiguration| %>
+      <tr>
+        <td><%= a_serverconfiguration.ipdevice %></td>
+        <td><%= a_serverconfiguration.networkmask %></td>
+        <td><%= a_serverconfiguration.gateway %></td>
+		<td><%= a_serverconfiguration.dns1 %></td>
+       </tr>
+    
+</table>
+
+<a>
+</a>
+<a>
+</a>
+
+<br>
+</br>
+
+<table border="1" style="width:300px">
+<caption><b>Configuración del servidor</b></caption>
+  
+    <tr>
+      <td><b>Dirección url del servidor</b></td>
+      <td><b>Tiempo de refresco (min)</b></td>   
+	  <td><b>Tiempo de refresco en caso de error (min)</b></td>   
+    </tr>
+
+      <tr>
+        <td><%= a_serverconfiguration.url_server %></td>
+        <td><%= a_serverconfiguration.refreshtime %></td>
+		<td><%= a_serverconfiguration.refreshtime_error %></td>
+        </tr>   
+  
+</table>
+
+</div>
+<br>
+
+ <%= link_to 'Edit', edit_a_serverconfiguration_path(a_serverconfiguration) %>
+
+<% end %>
+
+

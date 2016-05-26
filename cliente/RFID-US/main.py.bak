@@ -1,0 +1,172 @@
+import psycopg2
+import sys
+import httplib2
+import xml.etree.cElementTree as ET
+import datetime
+import time
+from threading import Thread
+import os
+
+#def create_getlist(serverip,fechahora,edificio,tipoaula,aula):
+  #root = ET.Element("horfeus")
+  #doc = ET.SubElement(root, "firma")
+
+  #field1 = ET.SubElement(doc, "ip")
+  #field1.text = serverip
+  #field2 = ET.SubElement(doc, "TipoCliente")
+  #field2.text = "4"
+  #field3 = ET.SubElement(doc, "tiempo")
+  #field3.text = fechahora
+  #field4 = ET.SubElement(doc, "edificio")
+  #field4.text = edificio
+  #field5 = ET.SubElement(doc, "TipoAula")
+  #field5.text = tipoaula
+  #field6 = ET.SubElement(doc, "aula")
+  #field6.text = aula
+
+  #tree = ET.ElementTree(root)
+  #tree.write("getlist.xml")
+  #getlist = ET.tostring(root)
+  #return getlist
+
+def create_getlist(myip):
+  root = ET.Element("horfeus")
+  doc = ET.SubElement(root, "aulas")
+
+  field1 = ET.SubElement(doc, "IP")
+  field1.text = myip
+
+  tree = ET.ElementTree(root)
+  tree.write("getlist.xml")
+  getlist = ET.tostring(root)
+  return getlist
+
+def create_registro(myip,fechahora,edificio,tipoaula,aula,serie):
+  root = ET.Element("horfeus")
+
+  doc = ET.SubElement(root, "firma")
+ 
+  field2 = ET.SubElement(doc, "IP")
+  field2.text = myip
+  field3 = ET.SubElement(doc, "TipoCliente")
+  field3.text = 4
+  field4 = ET.SubElement(doc, "tiempo")
+  field4.text = fechahora
+  field5 = ET.SubElement(doc, "edificio")
+  field5.text = edificio
+  field6 = ET.SubElement(doc, "TipoAula")
+  field6.text = tipoaula
+  field7 = ET.SubElement(doc, "aula")
+  field7.text = aula
+  field8 = ET.SubElement(doc, "serie")
+  field8.text = serie
+  tree = ET.ElementTree(doc)
+  tree.write("registro.xml")
+  registro = ET.tostring(doc) 
+
+  return registro
+
+
+def arranca_rails(myip):
+    command = "sudo sh execrails.sh " + myip
+    #command = "cd /home/pi/Desktop/RFID-US; rails s -b " + myip + " -p 3000 > /home/pi/Desktop/rails_server.log 2>&1 &"
+    print(command)
+    os.system(command)
+    print("Hola")
+
+def main():
+    con = psycopg2.connect(host='localhost', database='BD_RFID', user='sinapse', password='napse1si')
+    cur = con.cursor()
+    query = "SELECT ipdevice FROM a_serverconfigurations"
+    cur.execute(query)
+    resultado = cur.fetchone()
+    myip=str(resultado[0])
+    cur.close()
+    print("Arrancamos Rails")
+    t1 = Thread(target=arranca_rails, args=(myip,))
+    t1.start()
+	
+	# Welcome message
+######################  MOSTRAR POR PANTALLA FECHA-HORA 
+    print("Welcome to RFID Sinapse")
+    #bucle donde me quedo leyendo continuamente
+
+########Cuando leo un dato en la tarjeta, envio el registro
+    #en serie almaceno el valor leido
+    serie = "valorleido"
+    con = psycopg2.connect(host='localhost', database='BD_RFID', user='sinapse', password='napse1si')
+
+    cur = con.cursor()
+    query = "SELECT url_server,ipdevice FROM a_serverconfigurations"
+  
+    cur.execute(query)
+    resultado = cur.fetchone()
+    a_url=str(resultado[0])
+    myip=str(resultado[1])
+   
+    query = "SELECT d_edificio,d_aula,d_tipoaula FROM d_aulas INNER JOIN d_auladispositivo ON da_idaula=d_id INNER JOIN a_deviceconfiguration ON ad_id=da_iddispositivo"
+
+    cur.execute(query)
+    resultado = cur.fetchone()
+  
+    edificio=str(resultado[0])
+    aula=str(resultado[1])
+    tipoaula=str(resultado[2])
+    
+    cur.close()
+    create_registro(myip,datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S"),edificio,tipoaula,aula,serie)
+    
+    
+    
+
+
+def get_list():
+  while True:
+    con = psycopg2.connect(host='localhost', database='BD_RFID', user='sinapse', password='napse1si')
+
+    cur = con.cursor()
+    query = "SELECT url_server,ipdevice FROM a_serverconfigurations"
+  
+    cur.execute(query)
+    resultado = cur.fetchone()
+    a_url=str(resultado[0])
+    myip=str(resultado[1])
+   
+    query = "SELECT d_edificio,d_aula,d_tipoaula FROM d_aulas INNER JOIN d_auladispositivo ON da_idaula=d_id INNER JOIN a_deviceconfiguration ON ad_id=da_iddispositivo"
+
+    cur.execute(query)
+    resultado = cur.fetchone()
+  
+    edificio=str(resultado[0])
+    aula=str(resultado[1])
+    tipoaula=str(resultado[2])
+
+    query = "SELECT refreshtime FROM a_serverconfigurations LIMIT 1"
+    cur.execute(query)
+    resultado = cur.fetchone()
+
+    refreshtime=str(resultado[0])
+
+    cur.close()
+    #getlist = create_getlist(myip,datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+    getlist = create_getlist(myip)
+    h = httplib2.Http(".cache", 100)
+    httplib2.force_exception_to_status_code = True
+    try:    
+#################### IMPRIMIR EN PANTALLA ACTUALIZACION         
+        print("Actualizacion de configuracion")
+        (resp_headers, content) = h.request(a_url, "GET", body=getlist, headers={'content-type':'text/plain'})       
+        print(content)       
+#################### PROCESAR LA RESPUESTA DEL SERVIDOR PARA ACTUALIZAR MIS DATOS Y MOSTRAR EN PANTALLA
+        print(getlist)
+        time.sleep(float(refreshtime) * 60)
+    except:
+#################### IMPRIMIR EN PANTALLA ERROR DE CONEXION CON EL SERVIDOR 
+        print("Error:", sys.exc_info()[0])
+        #time.sleep(float(refreshtime))
+
+print("Ejecutamos el script Python")
+main()
+
+t = Thread(target=get_list, args=())
+t.start()
