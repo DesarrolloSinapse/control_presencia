@@ -144,7 +144,7 @@ def genera_xml(ip, t_lectora, cod_usuario, cod_tarjeta):
 
 	cursor.execute('UPDATE equipos SET updated_at = %s WHERE id = %s',(time.strftime('%Y-%m-%d %H:%M:%S'), lectora[0],))
 
-	if(usuario[12] != tarjeta[1] or tarjeta[2] != usuario[1]):
+	if(usuario[12] != tarjeta[0] or tarjeta[2] != usuario[0]):
 		codigo = -1
 		nombre = "**ACCESO CON TARJETA INCORRECTA**"
 		documento = '********'
