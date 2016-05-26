@@ -109,8 +109,9 @@ def envio_email(asunto, mensaje):
 		else:
 			server = smtplib.SMTP(servidor[3],servidor[4])
 
-		server.login(servidor[1],servidor[2])
-
+		if servidor[2] != '':
+    			server.login(servidor[1],servidor[2])
+	
 		cursor.execute("SELECT * FROM users WHERE admin = 1")
 		administradores = cursor.fetchall()
 		for admin in administradores:
