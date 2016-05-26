@@ -119,7 +119,6 @@ def envio_email(asunto, mensaje):
 			MIME-Version: 1.0
 			Content-Type: text/html
 			Subject: %s
-
 			%s
 			''' % (servidor[1], admin[1], admin[1], asunto, cuerpo)
 
