@@ -121,9 +121,8 @@ def envio_email(asunto, mensaje):
 			Subject: %s
 			%s
 			''' % (servidor[1], admin[1], admin[1], asunto, mensaje)
-
-			server.sendmail(servidor[1],admin[1],msg)
-			#print("\n-----------------------------------\n"+asunto+"\n\n"+mensaje+"\n-----------------------------------\n")
+				
+			server.sendmail(servidor[1],admin[1],msg.encode("ascii","ignore"))			
 	else:
 		print("\n-----------------------------------\n"+asunto+"\n\n"+mensaje+"\n-----------------------------------\n")
 
